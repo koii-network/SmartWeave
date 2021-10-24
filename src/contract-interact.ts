@@ -30,8 +30,9 @@ export async function interactWrite(
   tags: { name: string; value: string }[] = [],
   target: string = '',
   winstonQty: string = '',
+  multiplier: number = 0
 ): Promise<string> {
-  const interactionTx = await createTx(arweave, wallet, contractId, input, tags, target, winstonQty);
+  const interactionTx = await createTx(arweave, wallet, contractId, input, tags, target, winstonQty, multiplier);
 
   const response = await arweave.transactions.post(interactionTx);
 
@@ -238,6 +239,7 @@ async function createTx(
   tags: { name: string; value: string }[],
   target: string = '',
   winstonQty: string = '0',
+  multiplier: number = 0
 ): Promise<Transaction> {
   const options: Partial<CreateTransactionInterface> = {
     data: Math.random().toString().slice(-4)
@@ -251,7 +253,7 @@ async function createTx(
   }
 
   const interactionTx = await arweave.createTransaction(options, wallet);
-
+  interactionTx.reward = interactionTx.reward * ( multiplier / 100 + 1 )
   if (!input) {
     throw new Error(`Input should be a truthy value: ${JSON.stringify(input)}`);
   }
