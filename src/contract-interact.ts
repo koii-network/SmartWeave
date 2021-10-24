@@ -253,7 +253,7 @@ async function createTx(
   }
 
   const interactionTx = await arweave.createTransaction(options, wallet);
-  interactionTx.reward = interactionTx.reward * ( multiplier / 100 + 1 )
+  interactionTx.reward = (Number(interactionTx.reward) * ( multiplier / 100 + 1 )).toString()
   if (!input) {
     throw new Error(`Input should be a truthy value: ${JSON.stringify(input)}`);
   }
